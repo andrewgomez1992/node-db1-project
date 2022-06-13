@@ -7,7 +7,7 @@ router.get('/', async (req, res, next) => {
     const accounts = await Account.getAll()
     res.json(accounts)
   } catch (err) {
-    next({ status: 422, message: 'this is horrible' })
+    next({ status: 422, message: 'account not found' })
   }
 })
 
@@ -18,9 +18,9 @@ router.get('/:id', md.checkAccountId, (req, res, next) => {
 router.post('/', md.checkAccountPayload, md.checkAccountNameUnique, async (req, res, next) => {
   try {
     const data = await Account.create(req.body)
-    res.json(data)
+    res.status(201).json(data)
   } catch (err) {
-    next(err)
+    next({ status: 400, message: 'that name is taken' })
   }
 })
 

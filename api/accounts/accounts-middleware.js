@@ -13,7 +13,10 @@ exports.checkAccountPayload = (req, res, next) => {
     error.message = 'name of account must be between 3 and 100'
     next(error)
   } else if (typeof budget !== 'number' || isNaN(budget)) {// NaN - not a number
-    error.message = 'name of account must be between 3 and 100'
+    error.message = "budget of account must be a number"
+    next(error)
+  } else if (budget < 0 || budget > 1000000) {
+    error.message = 'budget of account is too large or too small'
     next(error)
   }
   next()
@@ -28,7 +31,7 @@ exports.checkAccountId = async (req, res, next) => {
   try {
     const account = await Account.getById(req.params.id)
     if (!account) {
-      next({ status: 404, message: 'not found bro' })
+      next({ status: 404, message: 'account not found' })
     } else {
       req.account = account
       next()
