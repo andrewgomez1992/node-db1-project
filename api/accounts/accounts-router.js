@@ -1,12 +1,11 @@
 const router = require('express').Router()
 const md = require('./accounts-middleware')
-// const Account = require('./accounts-model')
+const Account = require('./accounts-model')
 
 router.get('/', async (req, res, next) => {
   try {
-    res.json('get accounts')
-    // const data = await Account.getAll()
-    // res.json(data)
+    const accounts = await Account.getAll()
+    res.json(accounts)
   } catch (err) {
     next({ status: 422, message: 'this is horrible' })
   }
@@ -14,7 +13,8 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', md.checkAccountId, async (req, res, next) => {
   try {
-    res.json('get accounts id')
+    const accounts = await Account.getById(req.params.id)
+    res.json(accounts)
   } catch (err) {
     next(err)
   }
